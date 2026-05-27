@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useExchangeStore } from '../store/exchangeStore'
 import { APP_NAME } from '../../shared/constants/brand'
+import { BrandLogo } from '../../shared/components/BrandLogo'
 
 const links = [
   { to: '/trade',   label: '现货' },
@@ -21,8 +22,8 @@ export function AppLayout() {
       {/* Header */}
       <header className="sticky top-0 z-20 flex h-12 items-center gap-6 border-b border-[#2b3139] bg-[#161a1e] px-4">
         {/* Logo */}
-        <div className="flex items-center gap-2 shrink-0">
-          <img src="/favicon.svg" alt={APP_NAME} className="h-6 w-6 rounded" />
+        <div className="flex shrink-0 items-center gap-2">
+          <BrandLogo size="sm" />
           <span className="text-sm font-bold tracking-wide text-[#eaecef]">{APP_NAME}</span>
         </div>
         {/* Nav */}

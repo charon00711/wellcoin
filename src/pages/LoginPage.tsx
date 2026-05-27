@@ -1,7 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useExchangeStore } from '../app/store/exchangeStore'
-import { APP_NAME, APP_TAGLINE } from '../shared/constants/brand'
+import { APP_TAGLINE } from '../shared/constants/brand'
+import { BrandLogo } from '../shared/components/BrandLogo'
 import { Button, Input } from '../shared/components/ui'
 
 export function LoginPage() {
@@ -22,12 +23,8 @@ export function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-[#0b0e11] px-4">
       <div className="w-full max-w-sm">
         {/* Logo */}
-        <div className="mb-8 flex items-center gap-3">
-          <img src="/wellcoin-icon.png" alt={APP_NAME} className="h-10 w-10 rounded-lg" />
-          <div>
-            <p className="text-xl font-bold">{APP_NAME}</p>
-            <p className="text-xs text-[#848e9c]">{APP_TAGLINE}</p>
-          </div>
+        <div className="mb-8">
+          <BrandLogo size="lg" showName tagline={APP_TAGLINE} />
         </div>
         <div className="rounded-lg border border-[#2b3139] bg-[#161a1e] p-6">
           <h1 className="mb-6 text-xl font-semibold">登录</h1>

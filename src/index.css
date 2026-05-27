@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-base:      #0b0e11;
+  --color-panel:     #161a1e;
+  --color-panel2:    #1e2329;
+  --color-border:    #2b3139;
+  --color-primary:   #eaecef;
+  --color-secondary: #848e9c;
+  --color-buy:       #02c076;
+  --color-sell:      #f6465d;
+  --color-accent:    #f0b90b;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+}
+
+:root { color-scheme: dark; }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-base);
+  color: var(--color-primary);
+  font-family: Inter, 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Number / price values use monospace */
+.num { font-family: var(--font-mono); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2b3139; border-radius: 2px; }

@@ -26,6 +26,18 @@ npm run dev
 npm test
 ```
 
+## 部署到 Cloudflare Pages
+
+构建命令与输出目录必须正确，否则会部署源码 `index.html`（引用 `/src/main.tsx`），页面会空白。
+
+| 配置项 | 值 |
+|--------|-----|
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Node version | `20`（环境变量 `NODE_VERSION=20`） |
+
+连接 GitHub 仓库 `main` 分支后，每次 push 会自动重新部署。项目已包含 `public/_redirects`，用于 SPA 子路由刷新。
+
 ## 说明
 
 这是演示原型，不包含真实后端、链上充值、生产级安全和合规能力。

@@ -6,7 +6,7 @@ import { OrderBookPanel } from '../features/market/components/OrderBookPanel'
 import { TickerBar } from '../features/market/components/TickerBar'
 import { TradesPanel } from '../features/market/components/TradesPanel'
 import { OrderRecordsPanel } from '../features/orders/components/OrderRecordsPanel'
-import { Button, Input, Panel, Select, SideTabs } from '../shared/components/ui'
+import { Button, Input, MobilePanelTabs, Panel, Select, SideTabs } from '../shared/components/ui'
 import { SYMBOLS, SYMBOL_CONFIG, type OrderSide, type OrderType, type TradingSymbol } from '../shared/types'
 import { formatNumber } from '../shared/utils/math'
 
@@ -102,6 +102,13 @@ function OrderForm() {
   )
 }
 
+const MOBILE_TABS = [
+  { id: 'chart', label: '图表' },
+  { id: 'book', label: '盘口' },
+  { id: 'trade', label: '交易' },
+  { id: 'orders', label: '委托' },
+]
+
 export function TradePage() {
   const setSelectedSymbol = useExchangeStore((s) => s.setSelectedSymbol)
   const setKlineInterval = useExchangeStore((s) => s.setKlineInterval)
@@ -113,6 +120,8 @@ export function TradePage() {
   const allTrades = useExchangeStore((s) => s.trades)
   const currentUserId = useExchangeStore((s) => s.currentUserId)
   const engine = useExchangeStore((s) => s.engine)
+
+  const [mobileTab, setMobileTab] = useState('chart')
 
   const lp = lastPrices[selectedSymbol] ?? SYMBOL_CONFIG[selectedSymbol].seedPrice
   const symbolTrades = allTrades.filter((t) => t.symbol === selectedSymbol)
@@ -133,8 +142,19 @@ export function TradePage() {
     ]),
   )
 
+  const orderRecords = (
+    <OrderRecordsPanel
+      symbol={selectedSymbol}
+      openOrders={openOrders}
+      historyOrders={userOrders}
+      trades={userTrades}
+      currentUserId={currentUserId}
+      onCancel={cancelOrder}
+    />
+  )
+
   return (
-    <div className="flex h-[calc(100vh-3rem)] flex-col overflow-hidden">
+    <div className="app-page-h flex flex-col overflow-hidden">
       <TickerBar
         selectedSymbol={selectedSymbol}
         lastPrices={lastPrices}
@@ -142,8 +162,39 @@ export function TradePage() {
         onSelectSymbol={(s: TradingSymbol) => setSelectedSymbol(s)}
       />
 
-      <div className="flex min-h-0 flex-1">
-        {/* 左侧：K线 + 订单记录 */}
+      {/* Mobile layout */}
+      <div className="flex min-h-0 flex-1 flex-col lg:hidden">
+        <MobilePanelTabs tabs={MOBILE_TABS} active={mobileTab} onChange={setMobileTab} />
+        <div className="min-h-0 flex-1 overflow-hidden">
+          {mobileTab === 'chart' && (
+            <KlineChart
+              candles={candles}
+              interval={klineInterval}
+              onIntervalChange={setKlineInterval}
+              className="h-full"
+            />
+          )}
+          {mobileTab === 'book' && (
+            <div className="flex h-full flex-col overflow-y-auto">
+              <Panel className="rounded-none border-0 border-b p-0!" noPadding>
+                <OrderBookPanel bids={orderBook.bids} asks={orderBook.asks} lastPrice={lp} />
+              </Panel>
+              <Panel className="rounded-none border-0" noPadding>
+                <TradesPanel trades={symbolTrades} />
+              </Panel>
+            </div>
+          )}
+          {mobileTab === 'trade' && (
+            <div className="h-full overflow-y-auto p-3">
+              <OrderForm />
+            </div>
+          )}
+          {mobileTab === 'orders' && orderRecords}
+        </div>
+      </div>
+
+      {/* Desktop layout */}
+      <div className="hidden min-h-0 flex-1 lg:flex">
         <div className="flex min-w-0 flex-1 flex-col border-r border-[#2b3139]">
           <div className="min-h-0 flex-[3] border-b border-[#2b3139]">
             <KlineChart
@@ -153,18 +204,10 @@ export function TradePage() {
             />
           </div>
           <div className="min-h-0 flex-1">
-            <OrderRecordsPanel
-              symbol={selectedSymbol}
-              openOrders={openOrders}
-              historyOrders={userOrders}
-              trades={userTrades}
-              currentUserId={currentUserId}
-              onCancel={cancelOrder}
-            />
+            {orderRecords}
           </div>
         </div>
 
-        {/* 右侧：盘口 + 下单 + 成交 */}
         <div className="flex w-72 shrink-0 flex-col overflow-y-auto border-[#2b3139]">
           <Panel className="rounded-none border-0 border-b p-0!" noPadding>
             <OrderBookPanel bids={orderBook.bids} asks={orderBook.asks} lastPrice={lp} />

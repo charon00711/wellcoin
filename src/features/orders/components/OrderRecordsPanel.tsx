@@ -68,10 +68,11 @@ export function OrderRecordsPanel({
 
   return (
     <div className="flex h-full min-h-0 w-full flex-1 flex-col bg-[#161a1e]">
-      <div className="flex shrink-0 items-center justify-between border-b border-[#2b3139] px-4 py-2">
+      <div className="flex shrink-0 items-center justify-between overflow-x-auto border-b border-[#2b3139] px-3 py-2 lg:px-4">
         <Tabs
           active={tab}
           onChange={setTab}
+          scrollable
           tabs={[
             { id: 'open', label: `当前委托 (${openOrders.length})` },
             { id: 'history', label: '订单记录' },

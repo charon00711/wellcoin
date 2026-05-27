@@ -70,6 +70,34 @@ export function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
 
 // ─── Tabs ─────────────────────────────────────────────────────────────────────
 export function Tabs({
+  tabs, active, onChange, scrollable = false,
+}: {
+  tabs: { id: string; label: string }[]
+  active: string
+  onChange: (id: string) => void
+  scrollable?: boolean
+}) {
+  return (
+    <div className={`flex gap-1 ${scrollable ? 'overflow-x-auto scrollbar-none' : ''}`}>
+      {tabs.map((tab) => (
+        <button
+          key={tab.id}
+          onClick={() => onChange(tab.id)}
+          className={`shrink-0 px-3 py-1.5 text-sm rounded transition ${
+            active === tab.id
+              ? 'bg-[#f0b90b]/15 text-[#f0b90b] font-medium'
+              : 'text-[#848e9c] hover:text-[#eaecef] hover:bg-[#2b3139]'
+          }`}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+// ─── MobilePanelTabs (H5 trading sub-tabs) ────────────────────────────────────
+export function MobilePanelTabs({
   tabs, active, onChange,
 }: {
   tabs: { id: string; label: string }[]
@@ -77,15 +105,15 @@ export function Tabs({
   onChange: (id: string) => void
 }) {
   return (
-    <div className="flex gap-1">
+    <div className="flex shrink-0 border-b border-[#2b3139] bg-[#161a1e]">
       {tabs.map((tab) => (
         <button
           key={tab.id}
           onClick={() => onChange(tab.id)}
-          className={`px-3 py-1.5 text-sm rounded transition ${
+          className={`flex-1 py-2.5 text-xs font-medium transition ${
             active === tab.id
-              ? 'bg-[#f0b90b]/15 text-[#f0b90b] font-medium'
-              : 'text-[#848e9c] hover:text-[#eaecef] hover:bg-[#2b3139]'
+              ? 'border-b-2 border-[#f0b90b] text-[#f0b90b]'
+              : 'text-[#848e9c]'
           }`}
         >
           {tab.label}
